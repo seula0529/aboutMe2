@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>즉문즉답</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section class="qna">
+      <!-- 표지 -->
+      <div class="page cover" id="cover">
+        <video class="cover-video" src="cover.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+        <h1 class="title">즉문즉답</h1>
+        <p class="sub">질문을 뽑고, 떠오르는 대로 답해 주세요</p>
+      </div>
+
+      <!-- 뽑은 질문 -->
+      <div class="page" id="draw" hidden>
+        <div class="inner">
+          <span class="num" id="num"></span>
+          <p class="question" id="question" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <!-- 끝내기: 뽑은 질문 모아보기 -->
+      <div class="page summary" id="summary" hidden>
+        <div class="inner">
+          <h2 class="title">오늘의 즉문즉답</h2>
+          <ol class="list" id="list"></ol>
+        </div>
+      </div>
+
+      <nav class="nav on-cover" id="nav">
+        <button class="btn ghost" id="endBtn" hidden>끝내기</button>
+        <button class="btn" id="drawBtn">질문 뽑기</button>
+        <button class="btn" id="restartBtn" hidden>처음으로</button>
+      </nav>
+    </section>
+    <script src="script.js"></script>
+  </body>
+</html>

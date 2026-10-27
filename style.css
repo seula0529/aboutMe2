@@ -1,0 +1,121 @@
+@font-face { font-family: 'Pretendard'; font-weight: 500; src: url('fonts/Pretendard-Medium.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'GumiRomance'; src: url('fonts/Gumi%20Romance.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'OwnglyphYuntaeng'; src: url('fonts/%EC%98%A8%EA%B8%80%EC%9E%8E%20%EC%9C%A4%ED%83%B1%EC%B2%B4.ttf') format('truetype'); font-display: swap; }
+
+:root {
+  --green: #5F7652;
+  --brown: #B58B68;
+  --black: #303229;
+  --ivory: #FFFDF7;
+  --beige: #F1EBDD;
+}
+body { margin: 0; -webkit-text-size-adjust: 100%; background: var(--ivory); color: var(--black); }
+[hidden] { display: none !important; }
+
+.qna {
+  position: relative;
+  width: 100%;
+  background: var(--ivory);
+  height: 100vh; /* dvh 미지원 브라우저용 */
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.page {
+  flex: 1;
+  min-height: 0;
+  box-sizing: border-box;
+  /* 하단 여백 = 버튼 영역 높이 (버튼이 페이지 위에 떠 있음) */
+  padding: 28px 20px calc(92px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  animation: fade 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes fade { from { opacity: 0; transform: translateY(8px); } }
+@media (prefers-reduced-motion: reduce) { .page { animation: none; } }
+/* 태블릿에서 본문이 너무 넓게 퍼지지 않도록 */
+.inner { width: 100%; max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; }
+
+.cover { position: relative; isolation: isolate; align-items: center; padding-top: 60px; text-align: center; background: var(--beige); }
+.cover > :not(.cover-video) { position: relative; }
+.cover-video { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+/* 텍스트 영역 딤드 — 상단 0.3에서 수직 중간 0으로 사라짐 */
+.cover::after { content: ''; position: absolute; inset: 0 0 50% 0; z-index: -1; background: linear-gradient(to bottom, rgb(255 253 247 / 0.3), rgb(255 253 247 / 0)); pointer-events: none; }
+.title { margin: 0 0 20px; font-family: 'GumiRomance', sans-serif; font-weight: normal; font-size: 45px; color: var(--green); }
+.cover .title { text-shadow: 0 0 20px var(--ivory), 0 0 20px var(--ivory); }
+.sub { margin: 0; font-size: 20px; }
+
+#draw .inner { margin-block: auto; }
+.num { margin-bottom: 10px; color: var(--brown); font-size: 15px; }
+.question {
+  margin: 0;
+  padding: 25px 20px;
+  border-radius: 16px;
+  background: var(--beige);
+  font-family: 'Pretendard', cursive;
+  font-size: 26px;
+  line-height: 1.6;
+  word-break: keep-all;
+  transition: filter 0.2s, opacity 0.2s;
+}
+.question.shuffling { filter: blur(2px); opacity: 0.6; }
+.question.reveal { animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 0 0 2px var(--green); }
+@keyframes pop { from { transform: scale(0.92); } }
+@media (prefers-reduced-motion: reduce) { .question.reveal { animation: none; } }
+
+.summary .title { font-size: 35px; text-align: center; }
+.list { margin: 0; padding: 0; list-style: none; counter-reset: q; }
+.list li {
+  counter-increment: q;
+  display: flex;
+  gap: 12px;
+  padding: 14px 10px;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+.list li + li { border-top: 1px solid var(--beige); }
+.list li::before { content: 'Q' counter(q); flex: none; color: var(--brown); }
+
+.nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  gap: 10px;
+  padding: 12px max(20px, calc((100% - 640px) / 2)) calc(16px + env(safe-area-inset-bottom));
+  background: var(--ivory);
+  transition: background-color 0.4s;
+}
+.nav.on-cover { background: transparent; }
+.btn {
+  flex: 1;
+  min-height: 52px;
+  border: 2px solid var(--green);
+  border-radius: 999px;
+  background: var(--green);
+  color: var(--ivory);
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.1s;
+}
+.btn.ghost { background: var(--ivory); color: var(--green); }
+.btn:active { transform: scale(0.96); background: var(--black); border-color: var(--black); color: var(--ivory); }
+.btn:disabled { opacity: 0.5; cursor: default; transform: none; background: var(--green); border-color: var(--green); color: var(--ivory); }
+.btn:focus-visible { outline: 2px solid var(--brown); outline-offset: 2px; }
+
+/* 마우스 등 hover 가능한 기기에서만 — 터치에서 hover가 눌러붙는 것 방지 */
+@media (hover: hover) {
+  .btn:hover:not(:disabled) { background: var(--brown); border-color: var(--brown); color: var(--ivory); }
+  .btn.ghost:hover { background: var(--beige); border-color: var(--green); color: var(--green); }
+  .btn:active:not(:disabled), .btn.ghost:active { background: var(--black); border-color: var(--black); color: var(--ivory); }
+}
